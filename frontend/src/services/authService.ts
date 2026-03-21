@@ -127,8 +127,11 @@ export const formatPrice = (price: number): string => {
 };
 
 export const timeAgo = (dateStr: string): string => {
+  // The backend on Render stores times in UTC. If the timestamp lacks 'Z', 
+  // explicitly append it so the browser parses it correctly as UTC.
+  const normalizedDateStr = dateStr.endsWith('Z') ? dateStr : `${dateStr}Z`;
   const now = new Date();
-  const date = new Date(dateStr);
+  const date = new Date(normalizedDateStr);
   const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
   if (seconds < 60) return 'just now';
   if (seconds < 3600) return `${Math.floor(seconds / 60)} min ago`;
