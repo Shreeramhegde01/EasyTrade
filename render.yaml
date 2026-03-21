@@ -4,6 +4,7 @@ services:
     name: easytrade-backend
     env: docker
     plan: free
+    dockerContext: ./backend
     dockerfilePath: ./backend/Dockerfile
     envVars:
       - key: DB_USERNAME
