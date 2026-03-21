@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import {
-  getMyChats, getMessages, sendMessage as apiSendMessage,
+  getMyChats, getMessages, sendMessage as apiSendMessage, deleteChat,
   Chat, Message, getCurrentUser, timeAgo,
 } from '../services/authService';
 
@@ -59,6 +59,20 @@ export default function ChatPage() {
     }
   };
 
+  const handleDeleteChat = async () => {
+    if (!activeChat) return;
+    if (!window.confirm("Are you sure you want to delete this conversation?")) return;
+    try {
+      await deleteChat(activeChat.id);
+      setChats(prev => prev.filter(c => c.id !== activeChat.id));
+      setActiveChat(null);
+      setMessages([]);
+    } catch (err) {
+      console.error(err);
+      alert("Failed to delete chat");
+    }
+  };
+
   const getOtherUser = (chat: Chat) => {
     return chat.buyer.id === currentUser?.id ? chat.seller : chat.buyer;
   };
@@ -102,9 +116,18 @@ export default function ChatPage() {
         <div className="chat-main">
           {activeChat ? (
             <>
-              <div className="chat-header">
-                <h3>{getOtherUser(activeChat).name}</h3>
-                <p>{activeChat.listing.title}</p>
+              <div className="chat-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div>
+                  <h3>{getOtherUser(activeChat).name}</h3>
+                  <p>{activeChat.listing.title}</p>
+                </div>
+                <button 
+                  className="btn" 
+                  onClick={handleDeleteChat} 
+                  style={{ padding: '0.4rem 0.8rem', fontSize: '0.9rem', backgroundColor: '#dc3545', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+                >
+                  Delete Chat
+                </button>
               </div>
 
               <div className="chat-messages">

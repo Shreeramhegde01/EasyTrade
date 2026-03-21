@@ -86,4 +86,20 @@ public class ChatService {
 
         return messageRepository.findByChatOrderByTimestampAsc(chat);
     }
+
+    @SuppressWarnings("null")
+    public void deleteChat(Long chatId, User user) {
+        Objects.requireNonNull(chatId, "Chat ID must not be null");
+        Chat chat = chatRepository.findById(chatId)
+                .orElseThrow(() -> new RuntimeException("Chat not found"));
+
+        if (!chat.getBuyer().getId().equals(user.getId()) &&
+            !chat.getSeller().getId().equals(user.getId())) {
+            throw new RuntimeException("You are not authorized to delete this chat");
+        }
+
+        List<Message> messages = messageRepository.findByChatOrderByTimestampAsc(chat);
+        messageRepository.deleteAll(messages);
+        chatRepository.delete(chat);
+    }
 }

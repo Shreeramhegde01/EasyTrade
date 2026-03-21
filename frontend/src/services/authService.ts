@@ -100,6 +100,9 @@ export const sendMessage = (chatId: number, content: string) =>
 export const getMessages = (chatId: number) =>
   api.get<Message[]>(`/chat/${chatId}/messages`);
 
+export const deleteChat = (chatId: number) =>
+  api.delete(`/chat/${chatId}`);
+
 // ===== HELPERS =====
 export const isLoggedIn = (): boolean => !!localStorage.getItem('token');
 

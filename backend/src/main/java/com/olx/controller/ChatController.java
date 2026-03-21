@@ -62,4 +62,14 @@ public class ChatController {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
     }
+
+    @DeleteMapping("/{chatId}")
+    public ResponseEntity<?> deleteChat(@PathVariable Long chatId, @AuthenticationPrincipal User user) {
+        try {
+            chatService.deleteChat(chatId, user);
+            return ResponseEntity.ok(Map.of("message", "Chat deleted successfully"));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
+    }
 }
