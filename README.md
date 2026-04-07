@@ -1,4 +1,4 @@
-# OLX Marketplace — Full Stack App
+# Easy Trade — Full Stack App
 
 A marketplace application built with **Spring Boot** (backend) and **React + TypeScript** (frontend).
 
